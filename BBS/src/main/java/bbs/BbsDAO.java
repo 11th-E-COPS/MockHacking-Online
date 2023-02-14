@@ -84,4 +84,52 @@ public class BbsDAO {
 		//데이터베이스 오류
 		return -1; 
 	}
+
+	//글 목록을 가져오는 함수
+	public ArrayList<Bbs> getList(int pageNumber) {
+		String SQL = "SELECT * FROM BBS WHERE bbsID < ?  AND bbsAvailable = 1 OREDR BY bbsID DESC LIMIT 10"; 
+		//bbsID가 특정조건보다 작을때, Available=1 또는 내림차순으로 10개까지 제한해서 나타냄
+		ArrayList<Bbs> list = new ArrayList<Bbs>();
+			
+		try{
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			pstmt.setInt(1, getNext() - (pageNumber - 1) * 10);
+			rs = pstmt.executeQuery();
+				
+			while(rs.next()) { //값이 존재할동안,
+				Bbs bbs = new Bbs();
+				bbs.setBbsID(rs.getInt(1));
+				bbs.setBbsTitle(rs.getString(2));
+				bbs.setUserID(rs.getString(3));
+				bbs.setBbsDate(rs.getString(4));
+				bbs.setBbsContent(rs.getString(5));
+				bbs.setBbsAvailable(rs.getInt(6));
+				    
+				list.add(bbs);
+			} 		
+		} catch(Exception e) {
+				e.printStackTrace();
+		}
+		
+		return list;
+		}
+	
+	//페이지 처리하는 함수
+	public boolean nextPage(int pageNumber){
+		String SQL = "SELECT * FROM BBS WHERE bbsID < ?  AND bbsAvailable = 1 OREDR BY bbsID DESC LIMIT 10"; 
+		
+		try{
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			pstmt.setInt(1, getNext() - (pageNumber - 1) * 10);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) { //값이 존재한다면
+				//다음으로 넘어갈 수 있는 true
+				return true;
+			} 		
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
 }
