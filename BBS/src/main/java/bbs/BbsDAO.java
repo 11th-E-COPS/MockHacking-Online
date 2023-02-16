@@ -117,7 +117,7 @@ public class BbsDAO {
 	
 	//페이지 처리하는 함수
 	public boolean nextPage(int pageNumber){
-		String SQL = "SELECT * FROM BBS WHERE bbsID < ?  AND bbsAvailable = 1 OREDR BY bbsID DESC LIMIT 10"; 
+		String SQL = "SELECT * FROM BBS WHERE bbsID < ?  AND bbsAvailable = 1"; 
 		
 		try{
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
