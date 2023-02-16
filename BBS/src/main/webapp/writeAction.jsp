@@ -9,7 +9,6 @@
 <jsp:setProperty name="bbs" property="bbsTitle" />
 <jsp:setProperty name="bbs" property="bbsContent" />
 
-<%System.out.println(bbs);%>
 
 <!DOCTYPE html>
 <html>
