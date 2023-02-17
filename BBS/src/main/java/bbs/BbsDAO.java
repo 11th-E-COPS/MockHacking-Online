@@ -1,11 +1,9 @@
 package bbs;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-
 public class BbsDAO {
 	
 	private Connection conn;
@@ -35,7 +33,6 @@ public class BbsDAO {
 				return rs.getString(1); //현재 시간 반환
 			}
 		} catch (Exception e){
-
 			e.printStackTrace();
 		}
 		//데이터베이스 오류
@@ -85,10 +82,9 @@ public class BbsDAO {
 		//데이터베이스 오류
 		return -1; 
 	}
-
 	//글 목록을 가져오는 함수
 	public ArrayList<Bbs> getList(int pageNumber) {
-		String SQL = "SELECT * FROM BBS WHERE bbsID < ?  AND bbsAvailable = 1 OREDR BY bbsID DESC LIMIT 10"; 
+		String SQL = "SELECT * FROM BBS WHERE bbsID < ?  AND bbsAvailable = 1 ORDER BY bbsID DESC LIMIT 10"; 
 		//bbsID가 특정조건보다 작을때, Available=1 또는 내림차순으로 10개까지 제한해서 나타냄
 		ArrayList<Bbs> list = new ArrayList<Bbs>();
 			
@@ -114,11 +110,11 @@ public class BbsDAO {
 		
 		return list;
 		}
-	
+
 	//페이지 처리하는 함수
 	public boolean nextPage(int pageNumber){
-		String SQL = "SELECT * FROM BBS WHERE bbsID < ?  AND bbsAvailable = 1"; 
-		
+		String SQL = "SELECT * FROM BBS WHERE bbsID < ? AND bbsAvailable = 1"; 
+
 		try{
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
 			pstmt.setInt(1, getNext() - (pageNumber - 1) * 10);
@@ -158,7 +154,36 @@ public class BbsDAO {
 			e.printStackTrace();
 		}
 		return null;
-		
-		
+
+	}
+	public int update(int bbsID, String bbsTitle, String bbsContent) {
+		String SQL = "UPDATE BBS SET bbsTitle = ?, bbsContent = ? WHERE bbsID = ?";
+		try{
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			pstmt.setString(1, bbsTitle);
+			pstmt.setString(2, bbsContent);
+			pstmt.setInt(3, bbsID);
+			
+			return pstmt.executeUpdate();
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		}
+		//데이터베이스 오류
+		return -1; 
+	}
+	
+	public int delete(int bbsID) {
+		String SQL = "UPDATE BBS SET bbsAvailable = 0 WHERE bbsID = ?";
+		try{
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			pstmt.setInt(1, bbsID);
+			return pstmt.executeUpdate();
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		}
+		//데이터베이스 오류
+		return -1; 
 	}
 }
