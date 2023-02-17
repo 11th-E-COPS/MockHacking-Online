@@ -13,7 +13,7 @@
 <link rel="stylesheet" href="css/bootstrap.css"> 
 <link rel="stylesheet" href="css/custom.css">
 
-<title>JSP 게시판</title>
+<title>JSP 게시판 웹 사이트</title>
 <style type = "text/css"></style>
 </head>
 <body>
